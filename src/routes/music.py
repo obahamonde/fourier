@@ -2,10 +2,11 @@ from fastapi import APIRouter
 
 from ..models import Music, NamespacedPrompt, Prompt, URLResponse
 
-app = APIRouter()
+app = APIRouter(prefix="/api", tags=["music"])
 music = Music()
 
-@app.post("/api/generate")
+
+@app.post("/generate")
 async def generate_music(data: Prompt):
     """
     Generate music based on the provided data.
@@ -19,7 +20,8 @@ async def generate_music(data: Prompt):
     url = await music.generate(data.text)
     return URLResponse(url=url)
 
-@app.post("/api/generate/next")
+
+@app.post("/generate/next")
 async def continue_generation(data: NamespacedPrompt):
     """
     Continue the generation of music based on the given prompt and namespace.
@@ -33,7 +35,8 @@ async def continue_generation(data: NamespacedPrompt):
     url = await music.continue_generation(data.text, data.namespace)
     return URLResponse(url=url)
 
-@app.post("/api/seed")
+
+@app.post("/seed")
 async def seed_generation():
     """
     Generate a seed for music generation.
