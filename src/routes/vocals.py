@@ -2,7 +2,7 @@ from fastapi import APIRouter
 
 from ..models import Prompt, URLResponse, Vocals
 
-app = APIRouter(tags=["vocals"], prefix="/api")
+app = APIRouter(tags=["vocals"], prefix="/api/vocals")
 vocals = Vocals()
 
 
@@ -17,5 +17,5 @@ async def generate_vocals(data: Prompt):
     Returns:
             URLResponse: The response containing the generated vocals URL.
     """
-    url = await vocals.generate_vocals(data.text)
+    url = await vocals.run(data.text)
     return URLResponse(url=url)

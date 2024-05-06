@@ -2,7 +2,7 @@ from fastapi import APIRouter
 
 from ..models import Music, NamespacedPrompt, Prompt, URLResponse
 
-app = APIRouter(prefix="/api", tags=["music"])
+app = APIRouter(prefix="/api/music", tags=["music"])
 music = Music()
 
 

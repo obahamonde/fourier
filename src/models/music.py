@@ -13,12 +13,11 @@ load_dotenv()
 import httpx
 import scipy  # type: ignore
 import torch
-from agent_proto import robust
 from audiocraft.models.musicgen import MusicGen
 
 from .storage import ObjectStorage
 
-music_gen: MusicGen = MusicGen.get_pretrained("facebook/musicgen-small")  # type: ignore
+music_gen: MusicGen = MusicGen.get_pretrained("facebook/musicgen-small")
 
 
 class Music(BaseModel):
@@ -70,14 +69,14 @@ class Music(BaseModel):
             key = tmp_file.name.split("/")[-1]
             await self.storage.put(key=key, data=file_content)
             return await self.storage.get(key=key)
- 
+
     async def _fetch_audio(self, url: str):
         async with httpx.AsyncClient() as client:
             response = await client.get(url)
             audio_data = np.frombuffer(response.content, dtype=np.int16)  # type: ignore
             tensor = torch.tensor(data=audio_data, dtype=torch.float32, device="cpu")
             return self._trim_audio_tensor(tensor)
-    @robust
+
     async def generate(self, text: str):
         """
         Generates music based on a given text prompt.
@@ -91,8 +90,8 @@ class Music(BaseModel):
         tensor = self.music.generate(descriptions=[text], progress=True)
         assert isinstance(tensor, torch.Tensor)
         return await self._save_wav_tensor(tensor)
-    @robust
-    async def continue_generation(self, text: str, namespace:str):
+
+    async def continue_generation(self, text: str, namespace: str):
         """
         Generates a continuation of the music based on a given text prompt and the previous audio.
 
@@ -109,7 +108,7 @@ class Music(BaseModel):
         )
         assert isinstance(tensor_out, torch.Tensor)
         return await self._save_wav_tensor(tensor_out)
-    @robust
+
     async def rag_generation(self, text: str):
         """
         Generates music with a melody and chroma based on a given text prompt.
@@ -130,7 +129,7 @@ class Music(BaseModel):
         )
         assert isinstance(tensor, torch.Tensor)
         return await self._save_wav_tensor(tensor)
-    @robust
+
     async def seed_generation(self):
         """
         Generates unconditional music with a fixed number of samples.

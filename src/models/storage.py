@@ -9,50 +9,45 @@ from boto3 import client
 
 logger = setup_logging(__name__)
 
+BUCKET_NAME = "terabytes"
+
+
 class ObjectStorage(LazyProxy[Any]):
+
     def __load__(self):
-        return client(
-            service_name="s3",
-            endpoint_url=os.environ.get("MINIO_ENDPOINT"),
-            aws_access_key_id=os.environ.get("MINIO_ROOT_USER"),
-            aws_secret_access_key=os.environ.get("MINIO_ROOT_PASSWORD"),
-            region_name="us-east-1",
-        )
+        return client(service_name="s3")
 
     @cached_property
-    def minio(self):
+    def api(self):
         return self.__load__()
 
     @async_io
-    def put_object(
-        self, *, key: str, data: bytes, bucket: str = "tera"
-    ):
-        self.minio.put_object(
+    def put_object(self, *, key: str, data: bytes, bucket: str = BUCKET_NAME):
+        data = self.api.put_object(
             Bucket=bucket,
             Key=key,
             Body=data,
             ContentType="audio/wav",
-            ACL="public-read",
             ContentDisposition="inline",
         )
 
     @async_io
     def generate_presigned_url(
-        self, *, key: str, bucket: str = "tera", ttl: int = 3600
+        self, *, key: str, bucket: str = BUCKET_NAME, ttl: int = 3600
     ):
-        return self.minio.generate_presigned_url(
+        return self.api.generate_presigned_url(
             ClientMethod="get_object",
             Params={"Bucket": bucket, "Key": key},
             ExpiresIn=ttl,
         )
 
-    @robust
-    async def put(self, *, key: str, data:bytes, bucket: str = "tera"):
-        await self.put_object(
-            key=key, data=data, bucket=bucket
-        )
-        return await self.generate_presigned_url(key=key, bucket=bucket)
+    async def put(self, *, key: str, data: bytes, bucket: str = BUCKET_NAME):
+        try:
+            await self.put_object(key=key, data=data, bucket=bucket)
+            return await self.generate_presigned_url(key=key, bucket=bucket)
+        except Exception as e:
+            logger.error(f"Failed to put object: {e.__class__.__name__}: {e}")
+            raise e
 
-    @robust
-    async def get(self, *, key: str, bucket: str = "tera"):
+    async def get(self, *, key: str, bucket: str = BUCKET_NAME):
         return await self.generate_presigned_url(key=key, bucket=bucket)
