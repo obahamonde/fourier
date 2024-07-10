@@ -13,3 +13,7 @@ async def generate(data: Request)->JobResponse:
 	Generate music based on the input data.
 	"""
 	return await handler(data)
+
+@app.get("/")
+def root():
+	return {"message": "Welcome to the Music Generation API.","status": "running."}
