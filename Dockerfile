@@ -1,29 +1,30 @@
-FROM python:3.11
-WORKDIR /app
-COPY . .
-# install ffmpeg
+# Base image -> https://github.com/runpod/containers/blob/main/official-templates/base/Dockerfile
+# DockerHub -> https://hub.docker.com/r/runpod/base/tags
+FROM runpod/base:0.4.0-cuda11.8.0
 
-RUN apt-get update
-RUN apt-get install -y ffmpeg
-RUN apt-get install -y libsm6 libxext6
-RUN apt-get install -y libxrender-dev
-RUN apt-get install -y libgl1-mesa-glx
-
-# install python dependencies
-RUN pip install --upgrade pip
-
-# install spacy
-
-RUN pip install spacy
-
-# download spacy model
-RUN python -m spacy download en_core_web_sm
-
-# spanish model
-RUN python -m spacy download es_core_news_sm
+# The base image comes with many system dependencies pre-installed to help you get started quickly.
+# Please refer to the base image's Dockerfile for more information before adding additional dependencies.
+# IMPORTANT: The base image overrides the default huggingface cache location.
 
 
+# --- Optional: System dependencies ---
+# COPY builder/setup.sh /setup.sh
+# RUN /bin/bash /setup.sh && \
+#     rm /setup.sh
 
-RUN pip install -r requirements.txt
-EXPOSE 8000
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+# Python dependencies
+COPY builder/requirements.txt /requirements.txt
+RUN python3.11 -m pip install --upgrade pip && \
+    python3.11 -m pip install --upgrade -r /requirements.txt --no-cache-dir && \
+    rm /requirements.txt
+
+RUN python3.11 -c 'import torchfrom audiocraft.models.musicgen import MusicGen;model=MusicGen.get_pretrained("facebook/musicgen-melody-large",device=torch.device("cuda"))'
+# NOTE: The base image comes with multiple Python versions pre-installed.
+#       It is reccommended to specify the version of Python when running your code.
+
+
+# Add src files (Worker Template)
+ADD src .
+
+CMD python3.11 -u /handler.py

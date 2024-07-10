@@ -8,7 +8,7 @@ from functools import cached_property
 import numpy as np
 import torchaudio  # type: ignore
 from dotenv import load_dotenv
-from pydantic import BaseModel, Field, HttpUrl
+from pydantic import BaseModel, Field
 
 load_dotenv()
 import spacy
@@ -25,9 +25,9 @@ from .storage import ObjectStorage
 MODELS:dict[Literal['en','es','music'],Union[Language,MusicGen]] = {
     'en':spacy.load('en_core_web_sm'),
     'es':spacy.load('es_core_news_sm'),
-    'music':MusicGen.get_pretrained("facebook/musicgen-melody-large") # type: ignore
-}
-    
+    'music':MusicGen.get_pretrained("facebook/musicgen-melody-large",device=torch.device('cuda')) # type: ignore
+}   
+
 
 class Music(BaseModel):
     """
@@ -52,13 +52,15 @@ class Music(BaseModel):
     """
 
     max_length: int = Field(
-        default=16000, description="The maximum length of the audio in samples."
+        default=160000, title="Max Length", description="The maximum length of the audio in samples"
     )
 
     @cached_property
     def music(self)->MusicGen:
-        return MODELS['music'] # type: ignore
-
+        mdo = MODELS['music'] # type: ignore
+        assert isinstance(mdo, MusicGen)
+        mdo.set_generation_params(use_sampling=True,temperature=1,duration=15,extend_stride=24)
+        return mdo
     @cached_property
     def storage(self):
         return ObjectStorage()
@@ -74,9 +76,9 @@ class Music(BaseModel):
         temp_audio_file = audio_stream.download() # type: ignore
 
         waveform, sample_rate = torchaudio.load(temp_audio_file) # type: ignore
-        if sample_rate != 16000:
+        if sample_rate != self.music.sample_rate:
             resampler = torchaudio.transforms.Resample(
-                orig_freq=sample_rate, new_freq=16000 # type: ignore
+                orig_freq=sample_rate, new_freq=self.music.sample_rate # type: ignore
             )
             waveform = resampler(waveform)
 
@@ -99,19 +101,19 @@ class Music(BaseModel):
         with httpx.Client() as client:
             response = client.get(url)
             audio_data = np.frombuffer(response.content, dtype=np.int16)  # type: ignore
-            tensor = torch.tensor(data=audio_data, dtype=torch.float32, device="cpu")
+            tensor = torch.tensor(audio_data, dtype=torch.float32, device="cpu")
             return self._trim_audio_tensor(tensor)
 
     def generate(self, * , descriptions: Union[str, list[str]],language:Literal['en','es']='en'):
         if isinstance(descriptions, str):
             lang = MODELS[language]
             assert isinstance(lang, Language)
-            descriptions = [token.text for token in lang(descriptions)]
+            descriptions = [token.text for token in lang(descriptions).sents]
         tensor = self.music.generate(descriptions=descriptions, progress=True)
         assert isinstance(tensor, torch.Tensor)
         return self._save_wav_tensor(tensor=tensor)
 
-    def generate_continuation(self, *, prompt: Union[HttpUrl, list[float]]):
+    def generate_continuation(self, *, prompt: Union[str, list[float]]):
         if isinstance(prompt, str):
             if "youtube.com" in prompt:
                 tensor = self._fetch_audio_from_youtube(prompt)
@@ -120,7 +122,7 @@ class Music(BaseModel):
         else:
             tensor = torch.tensor(prompt, dtype=torch.float32, device="cpu")
         tensor_out = self.music.generate_continuation(
-            prompt=tensor, prompt_sample_rate=16000, progress=True
+            prompt=tensor, prompt_sample_rate=self.music.sample_rate, progress=True
         )
         assert isinstance(tensor_out, torch.Tensor)
         return self._save_wav_tensor(tensor=tensor_out)

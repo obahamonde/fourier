@@ -1,9 +1,8 @@
-from .modules import Music, Vocals
+from .modules import Music
 from .schemas import JobResponse, Request
 from .utils import asyncify
 
 music = Music()
-vocals = Vocals()
 
 @asyncify
 def handler(job: Request):
@@ -17,9 +16,4 @@ def handler(job: Request):
 	elif input['kind'] == 'conditional':
 		assert input['descriptions'] is not None, "Descriptions must be provided."
 		return JobResponse(url=music.generate(descriptions=input['descriptions']))
-	elif input['kind'] == 'vocals':
-		assert input['text'] is not None, "Text must be provided."
-		return JobResponse(url=vocals.generate_full_song(input['text']))
 	return JobResponse(url=music.generate_unconditional())
-
-

@@ -1,0 +1,6 @@
+runpod
+audiocraft
+pydantic
+typing_extensions
+pytube
+openai
