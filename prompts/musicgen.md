@@ -1,0 +1,46 @@
+# Music Gen
+
+## Prompt Library
+
+**These are examples of single prompts which will generate 15 seconds of audio**
+
+Pop dance track with catchy melodies, tropical percussion, and upbeat rhythms, perfect for the beach
+A grand orchestral arrangement with thunderous percussion, epic brass fanfares, and soaring strings, creating a cinematic atmosphere fit for a heroic battle
+classic reggae track with an electronic guitar solo
+earthy tones, environmentally conscious, ukulele-infused, harmonic, breezy, easygoing, organic instrumentation, gentle grooves
+lofi slow bpm electro chill with organic samples
+drum and bass beat with intense percussions
+A dynamic blend of hip-hop and orchestral elements, with sweeping strings and brass, evoking the vibrant energy of the city.
+violins and synths that inspire awe at the finiteness of life and the universe
+80s electronic track with melodic synthesizers, catchy beat and groovy bass
+reggaeton track, with a booming 808 kick, synth melodies layered with Latin percussion elements, uplifting and energizing
+a piano and cello duet playing a sad chambers music
+smooth jazz, with a saxophone solo, piano chords, and snare full drums
+a light and cheerly EDM track, with syncopated drums, aery pads, and strong emotions
+a punchy double-bass and a distorted guitar riff
+acoustic folk song to play during roadtrips: guitar flute choirs
+rock with saturated guitars, a heavy bass line and crazy drum break and fills.
+90s rock song with electric guitar and heavy drums
+An 80s driving pop song with heavy drums and synth pads in the background
+An energetic hip-hop music piece, with synth sounds and strong bass. There is a rhythmic hi-hat patten in the drums
+lofi slow bpm electro chill with organic samples
+a light and cheerly EDM track, with syncopated drums, aery pads, and strong emotions
+A grand orchestral arrangement with thunderous percussion, epic brass fanfares, and soaring strings, creating a cinematic atmosphere fit for a heroic battle.
+
+## Task
+
+Generate prompts in a single paragraph that will generate a longer piece of music. Take as example the above but ellaborate on each to generate a 6 sentence paragraph.
+
+## Result
+
+A pop dance track that opens with bright, catchy melodies supported by upbeat rhythms, designed to lift spirits and get listeners moving. Tropical percussion adds an exotic flair, while smooth, punchy bass lines provide a solid groove throughout. Layered synth pads and vocal chops add a modern electronic twist, creating an infectious energy. The song builds to a chorus that explodes with rhythmic intensity and lush harmonies, perfect for a sun-soaked day at the beach. Dynamic shifts in tempo keep the track fresh and engaging, ensuring a vibrant atmosphere from start to finish. End with a euphoric drop, leaving listeners wanting more.
+A grand orchestral composition, starting with a soft, slow build of strings and woodwinds, gradually escalating into a thunderous crescendo. Epic brass fanfares and sweeping violins take center stage, evoking the imagery of a heroic battle or an epic saga. Bold, rhythmic percussion adds weight and urgency, driving the composition forward like a relentless charge. Each section of the orchestra takes its turn in the spotlight, from woodwinds carrying delicate motifs to brass leading powerful calls. Soaring melodies intertwine, creating a layered and cinematic texture that feels both majestic and timeless. The piece concludes with a triumphant resolution, leaving a lasting impression of grandeur and victory.
+An earthy, laid-back folk track that starts with the gentle strumming of a ukulele, inviting a sense of simplicity and calm. Organic instrumentation, including acoustic guitars and hand percussion, creates an inviting, breezy vibe. Light harmonies and soothing vocal lines sing of nature, love, and life, with a mellow tempo that encourages relaxation. The song introduces subtle harmonica and flute melodies, evoking a sense of connection to the earth and the environment. As the track progresses, the arrangement remains uncluttered, with each instrument playing its part in creating a wholesome, warm sound. The music ends on a gentle cadence, as if disappearing into a soft breeze.
+A slow, atmospheric lofi beat that opens with delicate synth pads, distant rain samples, and a crackling vinyl effect, setting a dreamy, reflective tone. The beat is minimal but effective, with a slow BPM and soft hi-hat rolls that blend seamlessly into the ambient textures. Organic samples, like birds chirping and wind rustling, create a natural, calming environment, perfect for study or relaxation. Subtle piano melodies play in the background, adding a touch of melancholy to the otherwise serene track. Synths and basses subtly evolve, layering the soundscape with emotional depth and complexity. The music fades gently, like the last rays of sunlight over a quiet city.
+A dynamic drum and bass track that opens with rapid, high-energy percussion and sharp hi-hat patterns, designed to get the adrenaline pumping. A deep, rolling bassline soon enters, anchoring the frenetic rhythm with its pulsing, gritty tones. Layers of synths and effects build tension, rising toward a high-octane drop that unleashes a storm of drums, snares, and kicks. The tempo is fast and unrelenting, with rhythmic shifts and fills keeping the listener on their toes. Occasional vocal samples add intensity and drama to the high-speed chaos. The track ends with a final surge of energy, leaving the listener breathless and wanting more.
+A classical duet featuring piano and cello, starting with a soft, introspective piano melody that sets a somber mood. The cello enters gracefully, playing long, mournful notes that complement the delicate piano lines. As the piece progresses, the two instruments engage in a heartfelt conversation, with the cello providing depth and emotion while the piano adds lightness and reflection. The harmonies are rich and complex, tugging at the listener's heartstrings and evoking a deep sense of melancholy. Each phrase builds on the last, with moments of tension and release that keep the listener engaged. The piece ends quietly, fading into a gentle silence, leaving a lingering sense of sadness.
+A smooth jazz piece that opens with a soulful saxophone solo, setting a warm, relaxed atmosphere. The piano follows with soft, rich chords that provide a lush harmonic backdrop. A steady drum beat, featuring light snare brushes and a walking bassline, establishes a groove that feels effortless and laid-back. The saxophone weaves in and out, improvising with flair, while the piano responds with playful fills and syncopated rhythms. The track builds gradually, adding energy with subtle crescendos, but always retains its smooth, easygoing vibe. It ends with a soft diminuendo, as the instruments fade out, leaving a sense of warmth and nostalgia.
+A high-energy reggaeton track that kicks off with a booming 808 kick and driving percussion, immediately setting the stage for a dance-floor anthem. The syncopated rhythm, infused with Latin percussion like congas and timbales, creates an irresistible groove. Synth melodies, bright and infectious, float above the beat, adding a layer of excitement. As the track progresses, vocal samples chant rhythmically, driving the energy higher. A breakdown introduces a slower, sultry bridge, building tension before the beat drops back in with even more intensity. The song ends with a final burst of energy, ensuring the crowd is left hyped and ready for more.
+An 80s-inspired electronic track that opens with bright, melodic synthesizers and a deep, groovy bassline. The beat is punchy, with heavy drums and sharp snares driving the rhythm forward. Soaring synth leads and lush pads fill the space, creating a nostalgic yet futuristic soundscape. The track gradually builds in intensity, layering additional harmonies and rhythmic elements that give it a rich, full sound. A breakdown introduces a moody, reflective section before launching back into the high-energy chorus. The song ends with a dramatic fade-out, like the closing credits of a classic retro movie.
+A lofi hip-hop track that starts with a smooth, laid-back beat, featuring soft, jazzy piano chords and a warm bassline. The drums are subtle, with a muted kick and light snare that give the track an understated groove. Atmospheric synths and field recordings, like distant chatter and the sound of passing cars, create a sense of urban solitude. A relaxed guitar melody floats in and out, adding a touch of melancholy to the mix. The track evolves gradually, with new textures and effects entering the soundscape, but always maintains its chill, reflective vibe. The music fades out slowly, like a sunset over the city skyline.
+Reggaeton at 90 bpm with a catchy bassline and a subtle hearthwarming melody. Catchy Reggaeton with 120 bpm and a heavy 808 kick drop releasing a party denbow.Reggaeton with 90 bpm and a heavy 808 kick subtle denbow.Latin Reggaeton at it's party anthem peak with Colombia melodies and a lot of denbow. Closing with a dramatic crescendo.

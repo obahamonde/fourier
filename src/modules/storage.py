@@ -1,26 +1,29 @@
 import logging
-from functools import cached_property
-from typing import Any
 
-from boto3 import client # type: ignore
+from boto3 import client  # type: ignore
+from botocore.client import Config
 from openai._utils._proxy import LazyProxy
+
+from ..utils import asyncify
 
 logger = logging.getLogger(__name__)
 
 BUCKET_NAME = "terabytes"
 
 
-class ObjectStorage(LazyProxy[Any]):
+class ObjectStorage(LazyProxy[object]):
     def __load__(self):
-        return client(service_name="s3")
+        return client(
+            service_name="s3",
+            endpoint_url="https://storage.indiecloud.co",
+            config=Config(signature_version="s3v4"),
+            aws_access_key_id="minioadmin",
+            aws_secret_access_key="minioadminpassword",
+        )
 
-    @cached_property
-    def api(self):
-        return self.__load__()
-
- 
+    @asyncify
     def put_object(self, *, key: str, data: bytes, bucket: str = BUCKET_NAME):
-        data = self.api.put_object( # type: ignore
+        data = self.__load__().put_object(  # type: ignore
             Bucket=bucket,
             Key=key,
             Body=data,
@@ -28,23 +31,18 @@ class ObjectStorage(LazyProxy[Any]):
             ContentDisposition="inline",
         )
 
-
-    def generate_presigned_url(
-        self, *, key: str, bucket: str = BUCKET_NAME, ttl: int = 3600
-    ):
-        return self.api.generate_presigned_url(
+    @asyncify
+    def get(self, *, key: str, bucket: str = BUCKET_NAME, ttl: int = 3600):
+        return self.__load__().generate_presigned_url(
             ClientMethod="get_object",
             Params={"Bucket": bucket, "Key": key},
             ExpiresIn=ttl,
         )
 
-    def put(self, *, key: str, data: bytes, bucket: str = BUCKET_NAME):
+    async def put(self, *, key: str, data: bytes, bucket: str = BUCKET_NAME):
         try:
-            self.put_object(key=key, data=data, bucket=bucket)
-            return self.generate_presigned_url(key=key, bucket=bucket)
+            await self.put_object(key=key, data=data, bucket=bucket)
+            return await self.get(key=key, bucket=bucket)
         except Exception as e:
             logger.error(f"Failed to put object: {e.__class__.__name__}: {e}")
             raise e
-
-    def get(self, *, key: str, bucket: str = BUCKET_NAME):
-        return self.generate_presigned_url(key=key, bucket=bucket)
