@@ -1,71 +1,50 @@
-# Project variables
-APP_NAME = fastapi-musicgen
-PYTHON_INTERPRETER = python3
-ENV ?= dev
-DOCKER_IMAGE = $(APP_NAME):latest
-PORT ?= 8888
+# Variables
+SERVICE_NAME=music
+DOCKER_COMPOSE=docker-compose
+DOCKER_BUILD=docker build
+PORT=8000
+HOST=0.0.0.0
+# Default target
+.DEFAULT_GOAL := prod
 
-# Help target (prints help for each target)
+# Help Function
 .PHONY: help
-help:
-	@echo "Usage: make [target]"
-	@echo ""
-	@echo "Targets:"
-	@echo "  install       Install dependencies"
-	@echo "  run           Run the FastAPI application"
-	@echo "  lint          Run linters for the codebase"
-	@echo "  format        Auto-format the codebase using black"
-	@echo "  test          Run unit tests"
-	@echo "  clean         Remove Python cache and temporary files"
-	@echo "  docker-build  Build the Docker image"
-	@echo "  docker-run    Run the application in Docker"
-	@echo "  docker-push   Push Docker image to registry"
-	@echo "  docker-clean  Clean up Docker containers and images"
+help: ## Display this help message
+	@echo "Available targets:"
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-20s %s\n", $$1, $$2}'
 
-.PHONY: install
-install:
-	$(PYTHON_INTERPRETER) -m pip install --upgrade pip
-	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt
+# Docker Commands
+.PHONY: build
+build: ## Build the audio Docker image
+	$(DOCKER_BUILD) -t $(SERVICE_NAME) .
+
+.PHONY: up
+up: ## Start the audio service
+	$(DOCKER_COMPOSE) up -d
+
+.PHONY: down
+down: ## Stop the audio service
+	$(DOCKER_COMPOSE) down
+
+.PHONY: logs
+logs: ## Show logs from the audio service
+	$(DOCKER_COMPOSE) logs -f $(SERVICE_NAME)
+
+# Clean
+.PHONY: clean
+clean: ## Clean up temporary files and Docker containers
+	find . -type d -name "__pycache__" -exec rm -rf {} +
+	find . -type f -name "*.pyc" -exec rm -f {} +
+	find . -type f -name "*.pyo" -exec rm -f {} +
 
 .PHONY: dev
-dev:
-	uvicorn main:app --reload --host 0.0.0.0 --port $(PORT)
+dev: ## Run the audio service in development mode
+	poetry run uvicorn main:app --reload --port $(PORT) --host $(HOST)
 
-.PHONY: format
-format:
-	@echo "Formatting code..."
-	black .
-	isort .
+.PHONY: prod
+prod: ## Run the audio service in production mode
+	nohup poetry run uvicorn main:app --port $(PORT) --host $(HOST) & > ./app.log
 
-.PHONY: test
-test:
-	@echo "Running tests..."
-	pytest
-
-.PHONY: clean
-clean:
-	find . -type d -name __pycache__ -exec rm -rf {} +
-	find . -type f -name '*.pyc' -delete
-	rm -rf .pytest_cache .mypy_cache
-
-
-.PHONY: build
-build:
-	@echo "Building Docker image..."
-	docker build -t $(DOCKER_IMAGE) .
-
-.PHONY: run
-run:
-	@echo "Running Docker container..."
-	docker run -it --rm -p ${PORT}:${PORT} $(DOCKER_IMAGE)
-
-.PHONY: push
-push:
-	@echo "Pushing Docker image to registry..."
-	docker push $(DOCKER_IMAGE)
-
-.PHONY: prune
-prune:
-	@echo "Cleaning Docker images and containers..."
-	docker system prune -f
-	docker images -q | xargs docker rmi -f || true
+.PHONY: openapi
+openapi: ## Generate OpenAPI schema
+	curl -X GET "http://$(HOST):$(PORT)/openapi.json" -H "accept: application/json" > openapi.json

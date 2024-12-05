@@ -2,23 +2,36 @@ import logging
 
 from boto3 import client  # type: ignore
 from botocore.client import Config
+from dotenv import load_dotenv
 from openai._utils._proxy import LazyProxy
 
 from ..utils import asyncify
 
+load_dotenv()
+
 logger = logging.getLogger(__name__)
 
-BUCKET_NAME = "terabytes"
+BUCKET_NAME = "realidad2"
 
 
 class ObjectStorage(LazyProxy[object]):
     def __load__(self):
+        """
+        Loads and returns an S3 client with the specified configuration.
+
+        This method initializes an S3 client using the boto3 library with the
+        following parameters:
+        - service_name: "s3"
+        - config: Config object with signature_version set to "s3v4"
+        - region_name: "us-east-2"
+
+        Returns:
+            boto3.client: An S3 client configured with the specified parameters.
+        """
         return client(
             service_name="s3",
-            endpoint_url="https://storage.indiecloud.co",
             config=Config(signature_version="s3v4"),
-            aws_access_key_id="minioadmin",
-            aws_secret_access_key="minioadminpassword",
+            region_name="us-east-2",
         )
 
     @asyncify

@@ -1,0 +1,17 @@
+/root/.cache/pypoetry/virtualenvs/audio_api-xS3fZVNL-py3.10/lib/python3.10/site-packages/transformers/models/encodec/modeling_encodec.py:124: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  self.register_buffer("padding_total", torch.tensor(kernel_size - stride, dtype=torch.int64), persistent=False)
+INFO:     Started server process [59602]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     100.64.0.33:43260 - "GET / HTTP/1.1" 200 OK
+INFO:     100.64.0.22:37480 - "GET / HTTP/1.1" 200 OK
+INFO:     100.64.0.33:59168 - "GET /docs HTTP/1.1" 200 OK
+INFO:     100.64.0.33:59168 - "GET /openapi.json HTTP/1.1" 200 OK
+{"timestamp": "2024-12-05 16:41:58,581", "level": "ERROR", "name": "🚀 IndieCloud 🚀", "message": "AttributeError: 'Depends' object has no attribute 'run'"}
+{"timestamp": "2024-12-05 16:41:58,582", "level": "ERROR", "name": "🚀 IndieCloud 🚀", "message": "HTTPException: 500: Internal Server Error: AttributeError => 'Depends' object has no attribute 'run'"}
+{"timestamp": "2024-12-05 16:41:59,583", "level": "ERROR", "name": "🚀 IndieCloud 🚀", "message": "AttributeError: 'Depends' object has no attribute 'run'"}
+{"timestamp": "2024-12-05 16:41:59,583", "level": "ERROR", "name": "🚀 IndieCloud 🚀", "message": "HTTPException: 500: Internal Server Error: AttributeError => 'Depends' object has no attribute 'run'"}
+{"timestamp": "2024-12-05 16:42:01,584", "level": "ERROR", "name": "🚀 IndieCloud 🚀", "message": "AttributeError: 'Depends' object has no attribute 'run'"}
+{"timestamp": "2024-12-05 16:42:01,585", "level": "ERROR", "name": "🚀 IndieCloud 🚀", "message": "HTTPException: 500: Internal Server Error: AttributeError => 'Depends' object has no attribute 'run'"}
+INFO:     100.64.0.31:38860 - "POST /v1/music/generations HTTP/1.1" 500 Internal Server Error
